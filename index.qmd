@@ -1,0 +1,73 @@
+---
+title: "Supplementary Online Information for Cooper _et al._ (2026)"
+image: ./assets/images/sipbs_compbio.png
+about:
+  template: trestles
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/sipbs/SI_Bizior_et_al_2026_Amt
+    - icon: envelope
+      text: Email
+      href: mailto:leighton.pritchard@strath.ac.uk
+toc: false
+---
+
+## Introduction
+
+This site provides supplementary information to help enable reproduction and independent exploration of the statistical analyses reported in Cooper _et al._ (2026).
+
+The pages in the `Analyses` section describe regression modelling for the manuscript "Structural and functional basis of lipid-associated, electrogenic ammonium transport by the Rhesus-family protein NeRh50 in _Nitrosomonas europaea_" by Cooper _et al._ We analyse this data to establish evidence in support of answers to the following key questions:
+
+1. Do maximum amplitude and/or decay rate constant vary for WT NeRh50 in response to changes in lipid-protein ratio (LPR)?
+2. Do maximum amplitude and/or decay rate constant vary for WT NeRh50 in response to a change in substrate from NH<sub>4</sub><sup>+</sup> to MeA?
+3. Do maximum amplitude and/or decay rate constant vary for WT NeRh50 in response to a changes in pH conditions?
+
+## Getting Started
+
+The analysis is presented across pages that can be accessed _via_ the `Analyses` menu or the links below:
+
+- [Figure 4c](figure_4c.qmd)
+- [Figure 5a](figure_5a.qmd)
+- [Figure 5b](figure_5b.qmd)
+- [Figure 6b](figure_6b.qmd)
+- [Figure 6d](figure_6d.qmd)
+
+## Datasets
+
+The underlying data for these analyses can be downloaded from the links below
+
+- [fig_4c.csv](assets/data/fig_4c.csv)
+- [fig_5a.csv](assets/data/fig_5a.csv)
+- [fig_5b.csv](assets/data/fig_5b.csv)
+- [fig_6b.csv](assets/data/fig_6b.csv)
+- [fig_6d.csv](assets/data/fig_6d.csv)
+
+The datasets are presented in @tbl-load-data.
+
+```{r}
+#| label: tbl-load-data
+#| tbl-cap: "Data for Cooper _et al._ _Data for maximum amplitude and decay rate constant at three LPR values, for WT Rh50._"
+#| tbl-subcap:
+#|    - "Maximum amplitude and decay rate constant at three LPR values, for WT Rh50 (figure 4c)."
+#|    - "Maximum amplitude and decay rate constant k for NH₄⁺ and MeA (figure 5a)."
+#|    - "Maximum amplitude and decay rate constant k for transient current measured after a 200 mM ammonium pulse in proteoliposomes containing NeRh50 at LPR10, at four pH conditions (figure 6b)."
+#|    - "Maximum amplitude and decay rate constant for representative SSME transient currents recorded at pH5-pH8 (figure 6d)."
+#|    - "Maximum amplitude and decay rate constant for transient currents recorded in the presence of 200 mM NH₄⁺ under static pH (pH6.5), in the presence of an inward proton gradient (pH6.5 to 7.5), and in the absence of NH4+ under the same proton-gradient configuration (figure 6f)."
+#| layout-ncol: 1
+
+# Use helper script to load dataframes
+source("assets/r/load_dataframes.R")
+dfms <- load_dataframes()
+
+# Show interactive tables of data
+DT::datatable(dfms$dfm_4c, options=list(pageLength=5))
+DT::datatable(dfms$dfm_5a, options=list(pageLength=5))
+DT::datatable(dfms$dfm_6b, options=list(pageLength=5))
+DT::datatable(dfms$dfm_6d, options=list(pageLength=5))
+DT::datatable(dfms$dfm_6f, options=list(pageLength=5))
+```
+
+## Reporting Problems Or Making Suggestions
+
+Please report any issues, problems, or suggested enhancements [at the issues page]({{< var github.issues >}})

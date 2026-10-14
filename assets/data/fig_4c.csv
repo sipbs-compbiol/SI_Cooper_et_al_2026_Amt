@@ -1,0 +1,25 @@
+﻿LPR,Replicate label,Amplitude (nA),k (s-1)
+5,WT Rh50 polar/popc 2/1 LPR5 NH4 n1:1,1.981,43.69
+5,WT Rh50 polar/popc 2/1 LPR5 NH4 n1:2,1.686,44.83
+5,WT Rh50 polar/popc 2/1 LPR5 NH4 n3:1,2.132,42.48
+5,WT Rh50 polar/popc 2/1 LPR5 NH4 n3:2,1.988,42.58
+5,WT Rh50 polar/popc 2/1 LPR5 NH4 n3:1,2.026,41.72
+5,WT Rh50 polar/popc 2/1 LPR5 NH4 n3:2,1.99,49.97
+5,WT Rh50 polar/popc 2/1 LPR5 NH4 n3:2,2.118,48.32
+5,WT Rh50 polar/popc 2/1 LPR5 NH4 n1:1,2.194,n/a
+5,WT Rh50 polar/popc 2/1 LPR5 NH4 n1:2,2.127,n/a
+10,WT Rh50 polar/popc 2/1 LPR10 NH4 n1:1,1.114,36.13
+10,WT Rh50 polar/popc 2/1 LPR10 NH4 n1:2,0.998,32.81
+10,WT Rh50 polar/popc 2/1 LPR10 NH4 n2:1,1.085,31.82
+10,WT Rh50 polar/popc 2/1 LPR10 NH4 n2:2,1.15,33
+10,WT Rh50 polar/popc 2/1 LPR10 NH4 n2:2,1.069,n/a
+10,WT Rh50 polar/popc 2/1 LPR10 NH4 n2:2,1.396,33.58
+10,WT Rh50 polar/popc 2/1 LPR10 NH4 n2:2,1.396,33.58
+10,WT Rh50 polar/popc 2/1 LPR10 NH4 n2:1,0.901,n/a
+10,WT Rh50 polar/popc 2/1 LPR10 NH4 n2:2,0.91,n/a
+50,WT Rh50 polar/popc 2/1 LPR50 NH4 n2:1,0.37,n/a
+50,WT Rh50 polar/popc 2/1 LPR50 NH4 n3:1,0.504,n/a
+50,WT Rh50 polar/popc 2/1 LPR50 NH4 n3:2,0.576,23.12
+50,WT Rh50 polar/popc 2/1 LPR50 NH4 n3:2,0.772,24.58
+50,WT Rh50 polar/popc 2/1 LPR50 NH4 n3:2,0.54,24.95
+50,WT Rh50 polar/popc 2/1 LPR50 NH4 n3:2,0.598,n/a

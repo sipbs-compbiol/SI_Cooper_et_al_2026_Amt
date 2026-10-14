@@ -1,0 +1,19 @@
+---
+title: "About"
+---
+
+The data in this manuscript were collected and analysed by the manuscript authors.
+
+- Benjamin Cooper (Oxford)
+- Adriana Bizior (Strathclyde) [ORCID](https://orcid.org/0000-0003-2995-8207)
+- Reza Talandashti (Oxford) [ORCID](https://orcid.org/0000-0003-4087-475X)
+- Abraham O. Oluwole (Oxford) [ORCID](https://orcid.org/0000-0001-8647-4781)
+- Peter Henderson (Strathclyde)
+- Thomas Harris (Strathclyde)
+- Carol V. Robinson (Oxford) [ORCID](https://orcid.org/0000-0001-7829-5505)
+- Paul A Hoskisson (Strathclyde) [ORCID](https://orcid.org/0000-0003-4332-1640), [Google Scholar](https://scholar.google.com/citations?hl=en&user=TIZIt8YAAAAJ)
+- Syma Khalid (Oxford) [ORCID](https://orcid.org/0000-0002-3694-5044), [Google Scholar](https://scholar.google.com/citations?hl=en&user=WHQ4M5YAAAAJ)
+- Leighton Pritchard (Strathclyde) [ORCID]https://orcid.org/0000-0002-8392-2822), [Google Scholar](https://scholar.google.com/citations?hl=en&user=5QhdsWkAAAAJ)
+- Georgia Isom (Oxford) [ORCID](https://orcid.org/0000-0001-9023-705X), [Google Scholar](https://scholar.google.com/citations?hl=en&user=acaClHYAAAAJ)
+- Arnaud Javelle (Strathclyde) [ORCID](https://orcid.org/0000-0002-3611-5737), [Google Scholar](https://scholar.google.com/citations?hl=en&user=_k5PV4QAAAAJ)
+

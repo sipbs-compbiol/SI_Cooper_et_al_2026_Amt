@@ -1,0 +1,30 @@
+Package: SI_Cooper_et_al_2026_Amt
+Title: SI_Cooper_et_al_2026_Amt
+Version: 0.1
+Authors@R: c(
+    person("Leighton", "Pritchard", , "leighton.pritchard@strath.ac.uk", role = c("aut", "cre")),
+  )
+URL: https://github.com/sipbs-compbiol/SI_Bizior_et_al_2026_Amt
+Depends: 
+    R (>= 4.6.0)
+Imports:
+    tidyverse (>= 2.0.0),
+    DT,
+    emmeans,
+    ggplot2,
+    ggpubr,
+    gtsummary,
+    kableExtra,
+    parameters,
+    performance,
+    rstatix,
+    sandwich,
+    see,
+    broom.helpers,
+    wesanderson
+Suggests:
+    knitr,
+    sessioninfo
+Remotes: tidyverse/dplyr
+Encoding: UTF-8
+License: CC NC ND 4.0

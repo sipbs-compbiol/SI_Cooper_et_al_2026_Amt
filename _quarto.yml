@@ -1,0 +1,60 @@
+project:
+  type: website
+  preview:
+    port: 4910
+
+website:
+  title: "Supplementary Information for Cooper _et al._ (2026)"
+  site-url: https://sipbs-compbiol.github.io/SI_Cooper_et_al_2026_Amt/
+  description: "Supplementary Information for Cooper _et al._ (2026)"
+  favicon: "icon_32.png"
+  cookie-consent:
+    type: express
+  open-graph:
+    locale: en_GB
+    description: "Supplementary Information for Cooper _et al._ (2026)"
+  navbar:
+    logo: ./assets/images/sipbs_compbio.png
+    right:
+      - href: index.qmd
+        text: Home
+      - text: Analyses
+        menu:
+        - href: figure_4c.qmd
+          text: Figure 4c
+        - href: figure_5a.qmd
+          text: Figure 5a
+        - href: figure_6b.qmd
+          text: Figure 6b
+        - href: figure_6d.qmd
+          text: Figure 6d
+        - href: figure_6f.qmd
+          text: Figure 6f
+      - href: about.qmd
+        text: About
+  page-footer: 
+    left: This site © University of Strathclyde 2026
+
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    toc: true
+    css: styles.css
+    embed-resources: true
+    code-fold: true
+    code-summary: "Show the code"
+    self-contained: true
+
+lightbox: true
+dpi: 300
+
+outputs:
+  format: xml
+  default: true
+
+editor: source
+
+execute:
+  freeze: auto
