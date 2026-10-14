@@ -1,0 +1,147 @@
+---
+title: "Figure 4c: `WT` NeRh50 maximum amplitudes and decay rate constants in response to changes in lipid-protein ratio (LPR)"
+---
+
+```{r setup}
+#| include: false
+
+# Use helper script to load dataframes
+source("assets/r/load_dataframes.R")
+dfms <- load_dataframes()
+
+options(ggplot2.discrete.colour = wesanderson::wes_palette("AsteroidCity1"))
+```
+
+Manuscript figure 4c uses shows `WT` maximum amplitude and decay rate constant variation over `LPR5`, `LPR10`, and `LPR50` for the `WT` NeRh50 with NH<sub>4</sub><sup>+</sup> (figure 4c).
+
+## The Dataset
+
+The data used for the figure are shown in @tbl-data-4c
+
+```{r}
+#| label: tbl-data-4c
+#| tbl-cap: "Maximum amplitude and decay rate constant at three LPR values, for WT Rh50 (figure 4c)."
+
+DT::datatable(dfms$dfm_4c, options=list(pageLength=5))
+```
+
+### Downloads
+
+- [download data](assets/data/fig_4c.csv)
+
+## The Models
+
+We use linear models for amplitude and decay rate as dependent variables, with LPR as the independent factor, checking fit in @fig-model-4c.
+
+```{r}
+#| label: fig-model-4c
+#| fig-cap: "Diagnostic plots for linear model fits of `amplitude ~ LPR` and `decayrate ~ LPR`. The splines for linearity/heteroscadicity are odd, but the datapoints are not concerning. There is some evidence of non-normality of residuals in the decay rate data, but nothing especially concerning." 
+#| fig-subcap:
+#|    - "`amplitude ~ LPR`"
+#|    - "`decayrate ~ LPR`"
+#| fig-width: 10
+#| fig-height: 10
+#| layout-ncol: 2
+
+# Fit the models
+model4c_amp_lm <- lm(amplitude ~ LPR, data=dfms$dfm_4c)
+model4c_k_lm <- lm(decayrate ~ LPR, data=dfms$dfm_4c)
+
+# Check model fit
+performance::check_model(model4c_amp_lm)
+performance::check_model(model4c_k_lm)
+```
+
+As the model fit is acceptable, we estimate contrasts in @tbl-contrasts-4c.
+
+```{r}
+#| label: tbl-contrasts-4c
+#| tbl-cap: "Contrasts for model fits, with Sidak adjustment. No contrast includes zero in the 95% confidence interval estimate." 
+#| tbl-subcap:
+#|    - "Maximum amplitude"
+#|    - "Decay rate"
+
+EMM <- emmeans::emmeans(model4c_amp_lm, ~ LPR)
+confint(emmeans::contrast(EMM, "pairwise", adjust="sidak")) |>
+  kableExtra::kbl(digits=3) |>
+  kableExtra::kable_styling(
+    bootstrap_options = c("hover", "responsive")
+  )
+
+EMM <- emmeans::emmeans(model4c_k_lm, ~ LPR)
+confint(emmeans::contrast(EMM, "pairwise", adjust="sidak")) |>
+  kableExtra::kbl(digits=3) |>
+  kableExtra::kable_styling(
+    bootstrap_options = c("hover", "responsive")
+  )
+```
+
+As no contrast includes zero in the 95% confidence interval, we conclude that there are differences in amplitude and decay rate constant for each pairwise comparison between LPR condition. 
+
+## The Figures
+
+We plot the differences, indicating P-values for the contrasts in @fig-plot-4c.
+
+```{r}
+#| label: fig-plot-4c
+#| warning: false
+#| fig-cap: "WT measurements across three LPRs, replicating figure 4c from the manuscript." 
+#| fig-subcap:
+#|    - "Figure 4c, maximum amplitude"
+#|    - "Figure 4c, decay rate"
+#| fig-width: 3
+#| fig-height: 4
+#| layout-ncol: 2
+
+# Get p-values, accounting for heteroscedasticity and multiple testing
+# Also generate group1 and group2 columns
+EMM_amp <- as.data.frame(pairs(emmeans::emmeans(model4c_amp_lm, ~ LPR),
+                               adjust="sidak")) |>
+  tidyr::separate(contrast, into=c("group1", "group2"), sep=" - ") |>
+  dplyr::mutate(y.position=2.5) |>
+  rstatix::add_significance()
+
+EMM_k <- as.data.frame(pairs(emmeans::emmeans(model4c_k_lm, ~ LPR),
+                               adjust="sidak")) |>
+  tidyr::separate(contrast, into=c("group1", "group2"), sep=" - ") |>
+  dplyr::mutate(y.position=85) |>
+  rstatix::add_significance()
+
+p4c_amp <- ggplot2::ggplot(dfms$dfm_4c, 
+                           ggplot2::aes(x=LPR, y=amplitude, color=LPR)) +
+  ggplot2::geom_boxplot(outlier.shape = NA) +
+  ggplot2::geom_jitter() +
+  ggplot2::labs(y="Maximum amplitude (nA)") +
+  ggplot2::ylim(0, 3.5) +
+  ggplot2::theme_minimal() +
+  ggpubr::stat_pvalue_manual(EMM_amp,
+                             label="p = {scales::pvalue(p.value)}",
+                             size=3, step.increase=0.1)
+
+p4c_k <- ggplot2::ggplot(dfms$dfm_4c, 
+                         ggplot2::aes(x=LPR, y=decayrate, color=LPR)) +
+  ggplot2::geom_boxplot(outlier.shape = NA) +
+  ggplot2::geom_jitter() +
+  ggplot2::labs(y="Decay rate constant k (/s)") +
+  ggplot2::ylim(0, 105) +
+  ggplot2::theme_minimal() +
+  ggpubr::stat_pvalue_manual(EMM_k, 
+                             label="p = {scales::pvalue(p.value)}", 
+                             size=3, step.increase=0.1)
+
+p4c_amp
+p4c_k
+
+# Write figures to file (commented out for webpage)
+#ggplot2::ggsave("assets/images/fig4c_WT_maximum_amplitude.pdf", p4c_amp)
+#ggplot2::ggsave("assets/images/fig4c_WT_maximum_amplitude.png", p4c_amp)
+#ggplot2::ggsave("assets/images/fig4c_WT_decay_rate_constant.pdf", p4c_k)
+#ggplot2::ggsave("assets/images/fig4c_WT_decay_rate_constant.png", p4c_k)
+```
+
+### Downloads
+
+- [Download maximum amplitude figure as .pdf](assets/images/fig4c_WT_maximum_amplitude.pdf)
+- [Download maximum amplitude figure as .png](assets/images/fig4c_WT_maximum_amplitude.png)
+- [Download decay rate constant figure as .pdf](assets/images/fig4c_WT_decay_rate_constant.pdf)
+- [Download decay rate constant figure as .png](assets/images/fig4c_WT_decay_rate_constant.png)
