@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "The data in this manuscript were collected and analysed by the manuscript authors.\n\nBenjamin Cooper (Oxford)\nAdriana Bizior (Strathclyde) ORCID\nReza Talandashti (Oxford) ORCID\nAbraham O. Oluwole (Oxford) ORCID\nPeter Henderson (Strathclyde)\nThomas Harris (Strathclyde)\nCarol V. Robinson (Oxford) ORCID\nPaul A Hoskisson (Strathclyde) ORCID, Google Scholar\nSyma Khalid (Oxford) ORCID, Google Scholar\nLeighton Pritchard (Strathclyde) [ORCID]https://orcid.org/0000-0002-8392-2822), Google Scholar\nGeorgia Isom (Oxford) ORCID, Google Scholar\nArnaud Javelle (Strathclyde) ORCID, Google Scholar"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Supplementary Online Information for Cooper et al. (2026)",
+    "section": "",
+    "text": "This site provides supplementary information to help enable reproduction and independent exploration of the statistical analyses reported in Cooper et al. (2026).\nThe pages in the Analyses section describe regression modelling for the manuscript “Structural and functional basis of lipid-associated, electrogenic ammonium transport by the Rhesus-family protein NeRh50 in Nitrosomonas europaea” by Cooper et al. We analyse this data to establish evidence in support of answers to the following key questions:\n\nDo maximum amplitude and/or decay rate constant vary for WT NeRh50 in response to changes in lipid-protein ratio (LPR)?\nDo maximum amplitude and/or decay rate constant vary for WT NeRh50 in response to a change in substrate from NH4+ to MeA?\nDo maximum amplitude and/or decay rate constant vary for WT NeRh50 in response to a changes in pH conditions?"
+  },
+  {
+    "objectID": "index.html#introduction",
+    "href": "index.html#introduction",
+    "title": "Supplementary Online Information for Cooper et al. (2026)",
+    "section": "",
+    "text": "This site provides supplementary information to help enable reproduction and independent exploration of the statistical analyses reported in Cooper et al. (2026).\nThe pages in the Analyses section describe regression modelling for the manuscript “Structural and functional basis of lipid-associated, electrogenic ammonium transport by the Rhesus-family protein NeRh50 in Nitrosomonas europaea” by Cooper et al. We analyse this data to establish evidence in support of answers to the following key questions:\n\nDo maximum amplitude and/or decay rate constant vary for WT NeRh50 in response to changes in lipid-protein ratio (LPR)?\nDo maximum amplitude and/or decay rate constant vary for WT NeRh50 in response to a change in substrate from NH4+ to MeA?\nDo maximum amplitude and/or decay rate constant vary for WT NeRh50 in response to a changes in pH conditions?"
+  },
+  {
+    "objectID": "index.html#getting-started",
+    "href": "index.html#getting-started",
+    "title": "Supplementary Online Information for Cooper et al. (2026)",
+    "section": "Getting Started",
+    "text": "Getting Started\nThe analysis is presented across pages that can be accessed via the Analyses menu or the links below:\n\nFigure 4c\nFigure 5a\nFigure 5b\nFigure 6b\nFigure 6d"
+  },
+  {
+    "objectID": "index.html#datasets",
+    "href": "index.html#datasets",
+    "title": "Supplementary Online Information for Cooper et al. (2026)",
+    "section": "Datasets",
+    "text": "Datasets\nThe underlying data for these analyses can be downloaded from the links below\n\nfig_4c.csv\nfig_5a.csv\nfig_5b.csv\nfig_6b.csv\nfig_6d.csv\n\nThe datasets are presented in Table 1.\n\nShow the code\n# Use helper script to load dataframes\nsource(\"assets/r/load_dataframes.R\")\ndfms &lt;- load_dataframes()\n\n# Show interactive tables of data\nDT::datatable(dfms$dfm_4c, options=list(pageLength=5))\nDT::datatable(dfms$dfm_5a, options=list(pageLength=5))\nDT::datatable(dfms$dfm_6b, options=list(pageLength=5))\nDT::datatable(dfms$dfm_6d, options=list(pageLength=5))\nDT::datatable(dfms$dfm_6f, options=list(pageLength=5))\n\n\n\n\nTable 1: Data for Cooper et al. Data for maximum amplitude and decay rate constant at three LPR values, for WT Rh50.\n\n\n\n\n\n\n\n(a) Maximum amplitude and decay rate constant at three LPR values, for WT Rh50 (figure 4c).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n(b) Maximum amplitude and decay rate constant k for NH₄⁺ and MeA (figure 5a).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n(c) Maximum amplitude and decay rate constant k for transient current measured after a 200 mM ammonium pulse in proteoliposomes containing NeRh50 at LPR10, at four pH conditions (figure 6b).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n(d) Maximum amplitude and decay rate constant for representative SSME transient currents recorded at pH5-pH8 (figure 6d).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n(e) Maximum amplitude and decay rate constant for transient currents recorded in the presence of 200 mM NH₄⁺ under static pH (pH6.5), in the presence of an inward proton gradient (pH6.5 to 7.5), and in the absence of NH4+ under the same proton-gradient configuration (figure 6f)."
+  },
+  {
+    "objectID": "index.html#reporting-problems-or-making-suggestions",
+    "href": "index.html#reporting-problems-or-making-suggestions",
+    "title": "Supplementary Online Information for Cooper et al. (2026)",
+    "section": "Reporting Problems Or Making Suggestions",
+    "text": "Reporting Problems Or Making Suggestions\nPlease report any issues, problems, or suggested enhancements at the issues page"
+  }
+]
