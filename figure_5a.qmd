@@ -1,0 +1,147 @@
+---
+title: "Figure 5a: `WT` NeRh50 maximum amplitudes and decay rate constants in response to changes in lipid-protein ratio (LPR)"
+---
+
+```{r setup}
+#| include: false
+
+# Use helper script to load dataframes
+source("assets/r/load_dataframes.R")
+dfms <- load_dataframes()
+
+options(ggplot2.discrete.colour = wesanderson::wes_palette("AsteroidCity1"))
+```
+
+Manuscript figure 5a shows `WT` maximum amplitude and decay rate constant variation over `LPR5`, `LPR10`, and `LPR50` for the `WT` NeRh50 with NH<sub>4</sub><sup>+</sup> (figure 4c).
+
+## The Dataset
+
+The data used for the figure are shown in @tbl-data-5a
+
+```{r}
+#| label: tbl-data-5a
+#| tbl-cap: "Maximum amplitude and decay rate constant k for NH₄⁺ and MeA (figure 5a)."
+
+DT::datatable(dfms$dfm_5a, options=list(pageLength=5))
+```
+
+### Downloads
+
+- [download data](assets/data/fig_5a.csv)
+
+## The Models
+
+A t-test would likely be fine here but, because a t-test is just a special case of a linear model, for consistency we again use linear models for amplitude and decay rate as dependent variables, with ligand as the independent factor, checking fit in @fig-model-5a.
+
+```{r}
+#| label: fig-model-5a
+#| fig-cap: "Diagnostic plots for linear model fits of `amplitude ~ ligand` and `decayrate ~ ligand`. The splines for linearity/heteroscadicity are odd, but the datapoints are not concerning. There is some evidence of non-normality of residuals in the maximum amplitude data, but nothing especially concerning." 
+#| fig-subcap:
+#|    - "`amplitude ~ ligand`"
+#|    - "`decayrate ~ ligand`"
+#| fig-width: 10
+#| fig-height: 10
+#| layout-ncol: 2
+
+# Fit the models
+model5a_amp_lm <- lm(amplitude ~ ligand, data=dfms$dfm_5a)
+model5a_k_lm <- lm(decayrate ~ ligand, data=dfms$dfm_5a)
+
+# Check model fit
+performance::check_model(model5a_amp_lm)
+performance::check_model(model5a_k_lm)
+```
+
+As the model fit is acceptable, we estimate contrasts in @tbl-contrasts-5a.
+
+```{r}
+#| label: tbl-contrasts-5a
+#| tbl-cap: "Contrasts for model fits, with Sidak adjustment. No contrast includes zero in the 95% confidence interval estimate." 
+#| tbl-subcap:
+#|    - "Maximum amplitude"
+#|    - "Decay rate"
+
+EMM <- emmeans::emmeans(model5a_amp_lm, ~ ligand)
+confint(emmeans::contrast(EMM, "pairwise", adjust="sidak")) |>
+  kableExtra::kbl(digits=3) |>
+  kableExtra::kable_styling(
+    bootstrap_options = c("hover", "responsive")
+  )
+
+EMM <- emmeans::emmeans(model5a_k_lm, ~ ligand)
+confint(emmeans::contrast(EMM, "pairwise", adjust="sidak")) |>
+  kableExtra::kbl(digits=3) |>
+  kableExtra::kable_styling(
+    bootstrap_options = c("hover", "responsive")
+  )
+```
+
+As no contrast includes zero in the 95% confidence interval, we conclude that there are differences in amplitude and decay rate constant for each pairwise comparison between ligands.
+
+## The Figures
+
+We plot the differences, indicating P-values for the contrasts in @fig-plot-5a.
+
+```{r}
+#| label: fig-plot-5a
+#| warning: false
+#| fig-cap: "WT measurements across two ligands, replicating figure 5a from the mansucript." 
+#| fig-subcap:
+#|    - "Figure 5a, maximum amplitude"
+#|    - "Figure 5a, decay rate"
+#| fig-width: 3
+#| fig-height: 4
+#| layout-ncol: 2
+
+# Get p-values, accounting for heteroscedasticity and multiple testing
+# Also generate group1 and group2 columns
+EMM_amp <- as.data.frame(pairs(emmeans::emmeans(model5a_amp_lm, ~ ligand),
+                               adjust="sidak")) |>
+  tidyr::separate(contrast, into=c("group1", "group2"), sep=" - ") |>
+  dplyr::mutate(y.position=2.5) |>
+  rstatix::add_significance()
+
+EMM_k <- as.data.frame(pairs(emmeans::emmeans(model5a_k_lm, ~ ligand),
+                               adjust="sidak")) |>
+  tidyr::separate(contrast, into=c("group1", "group2"), sep=" - ") |>
+  dplyr::mutate(y.position=85) |>
+  rstatix::add_significance()
+
+p5a_amp <- ggplot2::ggplot(dfms$dfm_5a, 
+                           ggplot2::aes(x=ligand, y=amplitude, color=ligand)) +
+  ggplot2::geom_boxplot(outlier.shape = NA) +
+  ggplot2::geom_jitter() +
+  ggplot2::labs(y="Maximum amplitude (nA)") +
+  ggplot2::ylim(0, 3.5) +
+  ggplot2::theme_minimal() +
+  ggpubr::stat_pvalue_manual(EMM_amp,
+                             label="p = {scales::pvalue(p.value)}",
+                             size=3, step.increase=0.1)
+
+p5a_k <- ggplot2::ggplot(dfms$dfm_5a, 
+                         ggplot2::aes(x=ligand, y=decayrate, color=ligand)) +
+  ggplot2::geom_boxplot(outlier.shape = NA) +
+  ggplot2::geom_jitter() +
+  ggplot2::labs(y="Decay rate constant k (/s)") +
+  ggplot2::ylim(0, 105) +
+  ggplot2::theme_minimal() +
+  ggpubr::stat_pvalue_manual(EMM_k, 
+                             label="p = {scales::pvalue(p.value)}", 
+                             size=3, step.increase=0.1)
+
+p5a_amp
+p5a_k
+
+# Write figures to file (commented out for webpage)
+#ggplot2::ggsave("assets/images/fig5a_WT_maximum_amplitude.pdf", p5a_amp)
+#ggplot2::ggsave("assets/images/fig5a_WT_maximum_amplitude.png", p5a_amp)
+#ggplot2::ggsave("assets/images/fig5a_WT_decay_rate_constant.png", p5a_k)
+#ggplot2::ggsave("assets/images/fig5a_WT_decay_rate_constant.pdf", p5a_k)
+```
+
+### Downloads
+
+- [Download maximum amplitude figure as .pdf](assets/images/fig5a_WT_maximum_amplitude.pdf)
+- [Download maximum amplitude figure as .png](assets/images/fig5a_WT_maximum_amplitude.png)
+- [Download decay rate constant figure as .pdf](assets/images/fig5a_WT_decay_rate_constant.pdf)
+- [Download decay rate constant figure as .png](assets/images/fig5a_WT_decay_rate_constant.png)
