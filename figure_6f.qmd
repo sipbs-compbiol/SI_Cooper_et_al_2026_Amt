@@ -1,0 +1,153 @@
+---
+title: "Figure 6f: `WT` NeRh50 maximum amplitudes and decay rate constants for transient currents recorded in the presence of 200 mM NH₄⁺ under static pH (pH6.5), in the presence of an inward proton gradient (pH6.5 to 7.5), and in the absence of NH4+ under the same proton-gradient configuration"
+---
+
+```{r setup}
+#| include: false
+
+# Use helper script to load dataframes
+source("assets/r/load_dataframes.R")
+dfms <- load_dataframes()
+
+options(ggplot2.discrete.colour = wesanderson::wes_palette("AsteroidCity1"))
+```
+
+Manuscript figure 6d shows `WT` maximum amplitude and decay rate constant variation for transient currents recorded in the presence of 200 mM NH₄⁺ under static pH (pH6.5), in the presence of an inward proton gradient (pH6.5 to 7.5), and in the absence of NH4+ under the same proton-gradient configuration (figure 6f)
+
+## The Dataset
+
+The data used for the figure are shown in @tbl-data-6f
+
+```{r}
+#| label: tbl-data-6f
+#| tbl-cap: "Maximum amplitude and decay rate constant for transient currents recorded in the presence of 200 mM NH₄⁺ under static pH (pH6.5), in the presence of an inward proton gradient (pH6.5 to 7.5), and in the absence of NH4+ under the same proton-gradient configuration (figure 6f)."
+
+DT::datatable(dfms$dfm_6f, options=list(pageLength=5))
+```
+
+### Downloads
+
+- [download data](assets/data/fig_6f.csv)
+
+## The Models
+
+We use linear models for amplitude and decay rate as dependent variables, with group as the independent factor, checking fit in @fig-model-6f.
+
+```{r}
+#| label: fig-model-6f
+#| fig-cap: "Diagnostic plots for linear model fits of `amplitude ~ group` and `decayrate ~ group`. There is some heteroscadicity in the maximum amplitude data, and there are suggestions of a slight departure from normality in the same data." 
+#| fig-subcap:
+#|    - "`amplitude ~ group`"
+#|    - "`decayrate ~ group`"
+#| fig-width: 10
+#| fig-height: 10
+#| layout-ncol: 2
+
+# Fit the models
+model6f_amp_lm <- lm(amplitude ~ group, data=dfms$dfm_6f)
+model6f_k_lm <- lm(decayrate ~ group, data=dfms$dfm_6f)
+
+# Check model fit
+performance::check_model(model6f_amp_lm)
+performance::check_model(model6f_k_lm)
+```
+
+As the model fit is acceptable, we estimate contrasts in @tbl-contrasts-6f.
+
+```{r}
+#| label: tbl-contrasts-6f
+#| tbl-cap: "Contrasts for model fits, with Sidak adjustment. Not all contrasts include zero in the 95% confidence interval estimate." 
+#| tbl-subcap:
+#|    - "Maximum amplitude"
+#|    - "Decay rate"
+
+EMM <- emmeans::emmeans(model6f_amp_lm, ~ group)
+confint(emmeans::contrast(EMM, "pairwise", adjust="sidak")) |>
+  kableExtra::kbl(digits=3) |>
+  kableExtra::kable_styling(
+    bootstrap_options = c("hover", "responsive")
+  )
+
+EMM <- emmeans::emmeans(model6f_k_lm, ~ group)
+confint(emmeans::contrast(EMM, "pairwise", adjust="sidak")) |>
+  kableExtra::kbl(digits=3) |>
+  kableExtra::kable_styling(
+    bootstrap_options = c("hover", "responsive")
+  )
+```
+
+For the maximum amplitude data we find that all contrasts with the pH6.5 to pH7.5 gradient with no NH4+ exclude zero from the 95% CI, but the contrast between pH6.5 and pH6.5 to pH7.5 with NH4+ indicates no difference between groups. There is also no support for a difference in decay rate constant between pH6.5 and pH6.5 to pH7.5 with NH4+. 
+
+## The Figures
+
+We plot the data, indicating P-values for the contrasts in @fig-plot-6f.
+
+```{r}
+#| label: fig-plot-6f
+#| warning: false
+#| fig-cap: "Maximum amplitude and decay rate constant for four pH regimes." 
+#| fig-subcap:
+#|    - "Figure 6f, maximum amplitude"
+#|    - "Figure 6f, decay rate"
+#| fig-width: 3
+#| fig-height: 5
+#| layout-ncol: 2
+
+# Get p-values, accounting for heteroscedasticity and multiple testing
+# Also generate group1 and group2 columns
+EMM_amp <- as.data.frame(pairs(emmeans::emmeans(model6f_amp_lm, ~ group),
+                               adjust="sidak")) |>
+  tidyr::separate(contrast, into=c("group1", "group2"), sep=" - ") |>
+  dplyr::mutate(y.position=2.5) |>
+  rstatix::add_significance()
+
+EMM_k <- as.data.frame(pairs(emmeans::emmeans(model6f_k_lm, ~ group),
+                               adjust="sidak")) |>
+  tidyr::separate(contrast, into=c("group1", "group2"), sep=" - ") |>
+  dplyr::mutate(y.position=90) |>
+  rstatix::add_significance()
+
+p6f_amp <- ggplot2::ggplot(dfms$dfm_6f, 
+                           ggplot2::aes(x=group, y=amplitude, color=group)) +
+  ggplot2::geom_boxplot(outlier.shape = NA) +
+  ggplot2::geom_jitter() +
+  ggplot2::labs(y="Maximum amplitude (nA)", x="") +
+  ggplot2::ylim(0, 4.5) +
+  ggplot2::theme_minimal() +
+  ggpubr::stat_pvalue_manual(EMM_amp,
+                             label="p = {scales::pvalue(p.value)}",
+                             size=3, step.increase=0.2)+
+  ggplot2::theme(legend.position = "none",
+                 axis.text.x = ggplot2::element_text(angle = 30, vjust = 0.5, hjust=1),
+                 plot.margin=ggplot2::unit(c(0.5,0.5,1,0.5), 'cm'))
+
+p6f_k <- ggplot2::ggplot(dfms$dfm_6f, 
+                         ggplot2::aes(x=group, y=decayrate, color=group)) +
+  ggplot2::geom_boxplot(outlier.shape = NA) +
+  ggplot2::geom_jitter() +
+  ggplot2::labs(y="Decay rate constant k (/s)", x="") +
+  ggplot2::ylim(0, 105) +
+  ggplot2::theme_minimal() +
+  ggpubr::stat_pvalue_manual(EMM_k, 
+                             label="p = {scales::pvalue(p.value)}", 
+                             size=3, step.increase=0.15)+
+  ggplot2::theme(legend.position = "none",
+                 axis.text.x = ggplot2::element_text(angle = 30, vjust = 0.5, hjust=1),
+                 plot.margin=ggplot2::unit(c(0.5,0.5,1,0.5), 'cm'))
+
+p6f_amp
+p6f_k
+
+# Write figures to file (commented out for webpage)
+#ggplot2::ggsave("assets/images/fig6f_WT_maximum_amplitude.pdf", p6f_amp)
+#ggplot2::ggsave("assets/images/fig6f_WT_maximum_amplitude.png", p6f_amp)
+#ggplot2::ggsave("assets/images/fig6f_WT_decay_rate_constant.png", p6f_k)
+#ggplot2::ggsave("assets/images/fig6f_WT_decay_rate_constant.pdf", p6f_k)
+```
+
+### Downloads
+
+- [Download maximum amplitude figure as .pdf](assets/images/fig6f_WT_maximum_amplitude.pdf)
+- [Download maximum amplitude figure as .png](assets/images/fig6f_WT_maximum_amplitude.png)
+- [Download decay rate constant figure as .pdf](assets/images/fig6f_WT_decay_rate_constant.pdf)
+- [Download decay rate constant figure as .png](assets/images/fig6f_WT_decay_rate_constant.png)
