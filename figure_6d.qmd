@@ -12,7 +12,7 @@ dfms <- load_dataframes()
 options(ggplot2.discrete.colour = wesanderson::wes_palette("AsteroidCity1"))
 ```
 
-Manuscript figure 6d shows `WT` maximum amplitude and decay rate constant variationfor representative SSME transient currents recorded at pH5-pH8 (figure 6d).
+Manuscript figure 6d shows `WT` maximum amplitude and decay rate constant variation for representative SSME transient currents recorded at pH5-pH8 (figure 6d).
 
 ## The Dataset
 
