@@ -1,5 +1,5 @@
 ---
-title: "Figure 5a: `WT` NeRh50 maximum amplitudes and decay rate constants in response to changes in lipid-protein ratio (LPR)"
+title: "Figure 5a: `WT` NeRh50 maximum amplitudes and decay rate constants in response to changes in ligans"
 ---
 
 ```{r setup}
