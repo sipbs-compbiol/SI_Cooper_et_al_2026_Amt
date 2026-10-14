@@ -12,7 +12,7 @@ dfms <- load_dataframes()
 options(ggplot2.discrete.colour = wesanderson::wes_palette("AsteroidCity1"))
 ```
 
-Manuscript figure 4c uses shows `WT` maximum amplitude and decay rate constant variation over `LPR5`, `LPR10`, and `LPR50` for the `WT` NeRh50 with NH<sub>4</sub><sup>+</sup> (figure 4c).
+Manuscript figure 4c shows `WT` maximum amplitude and decay rate constant variation over `LPR5`, `LPR10`, and `LPR50` for the `WT` NeRh50 with NH<sub>4</sub><sup>+</sup> (figure 4c).
 
 ## The Dataset
 
