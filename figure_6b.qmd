@@ -1,0 +1,147 @@
+---
+title: "Figure 6b: `WT` NeRh50 maximum amplitudes and decay rate constants after a 200 mM ammonium pulse in proteoliposomes containing NeRh50 at LPR10, at four pH conditions"
+---
+
+```{r setup}
+#| include: false
+
+# Use helper script to load dataframes
+source("assets/r/load_dataframes.R")
+dfms <- load_dataframes()
+
+options(ggplot2.discrete.colour = wesanderson::wes_palette("AsteroidCity1"))
+```
+
+Manuscript figure 6b shows `WT` maximum amplitude and decay rate constant variation after a 200 mM ammonium pulse in proteoliposomes containing NeRh50 at LPR10, at four pH conditions (figure 6b)
+
+## The Dataset
+
+The data used for the figure are shown in @tbl-data-6b
+
+```{r}
+#| label: tbl-data-6b
+#| tbl-cap: "Maximum amplitude and decay rate constant k for transient current measured after a 200 mM ammonium pulse in proteoliposomes containing NeRh50 at LPR10, at four pH conditions (figure 6b)."
+
+DT::datatable(dfms$dfm_6b, options=list(pageLength=5))
+```
+
+### Downloads
+
+- [download data](assets/data/fig_6b.csv)
+
+## The Models
+
+We use linear models for amplitude and decay rate as dependent variables, with group as the independent factor, checking fit in @fig-model-6b.
+
+```{r}
+#| label: fig-model-6b
+#| fig-cap: "Diagnostic plots for linear model fits of `amplitude ~ group` and `decayrate ~ group`. The heteroscadicity spline is odd, but the datapoints are not particularly concerning. There is some evidence of non-normality of residuals in the decay rate constant data, but nothing especially concerning." 
+#| fig-subcap:
+#|    - "`amplitude ~ group`"
+#|    - "`decayrate ~ group`"
+#| fig-width: 10
+#| fig-height: 10
+#| layout-ncol: 2
+
+# Fit the models
+model6b_amp_lm <- lm(amplitude ~ group, data=dfms$dfm_6b)
+model6b_k_lm <- lm(decayrate ~ group, data=dfms$dfm_6b)
+
+# Check model fit
+performance::check_model(model6b_amp_lm)
+performance::check_model(model6b_k_lm)
+```
+
+As the model fit is acceptable, we estimate contrasts in @tbl-contrasts-6b.
+
+```{r}
+#| label: tbl-contrasts-6b
+#| tbl-cap: "Contrasts for model fits, with Sidak adjustment. All contrasts include zero in the 95% confidence interval estimate." 
+#| tbl-subcap:
+#|    - "Maximum amplitude"
+#|    - "Decay rate"
+
+EMM <- emmeans::emmeans(model6b_amp_lm, ~ group)
+confint(emmeans::contrast(EMM, "pairwise", adjust="sidak")) |>
+  kableExtra::kbl(digits=3) |>
+  kableExtra::kable_styling(
+    bootstrap_options = c("hover", "responsive")
+  )
+
+EMM <- emmeans::emmeans(model6b_k_lm, ~ group)
+confint(emmeans::contrast(EMM, "pairwise", adjust="sidak")) |>
+  kableExtra::kbl(digits=3) |>
+  kableExtra::kable_styling(
+    bootstrap_options = c("hover", "responsive")
+  )
+```
+
+All contrasts include zero in the 95% confidence interval, so we conclude that there are no differences in amplitude and decay rate constant for each pairwise comparison between groups (pH conditions).
+
+## The Figures
+
+We plot the data, indicating P-values for the contrasts in @fig-plot-6b.
+
+```{r}
+#| label: fig-plot-6b
+#| warning: false
+#| fig-cap: "Transient current maximum amplitude and decay rate constant measured after a 200 mM ammonium pulse in proteoliposomes containing NeRh50 at LPR10, for four pH regimes." 
+#| fig-subcap:
+#|    - "Figure 6b, maximum amplitude"
+#|    - "Figure 6b, decay rate"
+#| fig-width: 6
+#| fig-height: 6
+#| layout-ncol: 2
+
+# Get p-values, accounting for heteroscedasticity and multiple testing
+# Also generate group1 and group2 columns
+EMM_amp <- as.data.frame(pairs(emmeans::emmeans(model6b_amp_lm, ~ group),
+                               adjust="sidak")) |>
+  tidyr::separate(contrast, into=c("group1", "group2"), sep=" - ") |>
+  dplyr::mutate(y.position=2.5) |>
+  rstatix::add_significance()
+
+EMM_k <- as.data.frame(pairs(emmeans::emmeans(model6b_k_lm, ~ group),
+                               adjust="sidak")) |>
+  tidyr::separate(contrast, into=c("group1", "group2"), sep=" - ") |>
+  dplyr::mutate(y.position=70) |>
+  rstatix::add_significance()
+
+p6b_amp <- ggplot2::ggplot(dfms$dfm_6b, 
+                           ggplot2::aes(x=group, y=amplitude, color=group)) +
+  ggplot2::geom_boxplot(outlier.shape = NA) +
+  ggplot2::geom_jitter() +
+  ggplot2::labs(y="Maximum amplitude (nA)") +
+  ggplot2::ylim(0, 3.5) +
+  ggplot2::theme_minimal() +
+  ggpubr::stat_pvalue_manual(EMM_amp,
+                             label="p = {scales::pvalue(p.value)}",
+                             size=3, step.increase=0.1)
+
+p6b_k <- ggplot2::ggplot(dfms$dfm_6b, 
+                         ggplot2::aes(x=group, y=decayrate, color=group)) +
+  ggplot2::geom_boxplot(outlier.shape = NA) +
+  ggplot2::geom_jitter() +
+  ggplot2::labs(y="Decay rate constant k (/s)") +
+  ggplot2::ylim(0, 105) +
+  ggplot2::theme_minimal() +
+  ggpubr::stat_pvalue_manual(EMM_k, 
+                             label="p = {scales::pvalue(p.value)}", 
+                             size=3, step.increase=0.1)
+
+p6b_amp
+p6b_k
+
+# Write figures to file (commented out for webpage)
+ggplot2::ggsave("assets/images/fig6b_WT_maximum_amplitude.pdf", p6b_amp)
+ggplot2::ggsave("assets/images/fig6b_WT_maximum_amplitude.png", p6b_amp)
+ggplot2::ggsave("assets/images/fig6b_WT_decay_rate_constant.png", p6b_k)
+ggplot2::ggsave("assets/images/fig6b_WT_decay_rate_constant.pdf", p6b_k)
+```
+
+### Downloads
+
+- [Download maximum amplitude figure as .pdf](assets/images/fig6b_WT_maximum_amplitude.pdf)
+- [Download maximum amplitude figure as .png](assets/images/fig6b_WT_maximum_amplitude.png)
+- [Download decay rate constant figure as .pdf](assets/images/fig6b_WT_decay_rate_constant.pdf)
+- [Download decay rate constant figure as .png](assets/images/fig6b_WT_decay_rate_constant.png)
