@@ -1,31 +1,10 @@
 [
   {
-    "objectID": "fig_4c.html",
-    "href": "fig_4c.html",
-    "title": "Figure 4c: WT NeRh50 maximum amplitudes and decay rate constants in response to changes in lipid-protein ratio (LPR)",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
     "section": "",
-    "text": "Manuscript figure 4c uses shows WT maximum amplitude and decay rate constant variation over LPR5, LPR10, and LPR50 for the WT NeRh50 with NH4+ (figure 4c)."
-  },
-  {
-    "objectID": "fig_4c.html#the-dataset",
-    "href": "fig_4c.html#the-dataset",
-    "title": "Figure 4c: WT NeRh50 maximum amplitudes and decay rate constants in response to changes in lipid-protein ratio (LPR)",
-    "section": "The Dataset",
-    "text": "The Dataset\nThe data used for the figure are shown in Table 1\n\n\nShow the code\nDT::datatable(dfms$dfm_4c, options=list(pageLength=5))\n\n\n\n\nTable 1: Maximum amplitude and decay rate constant at three LPR values, for WT Rh50 (figure 4c).\n\n\n\n\n\n\n\n\n\n\n\nDownloads\n\ndownload data"
-  },
-  {
-    "objectID": "fig_4c.html#the-models",
-    "href": "fig_4c.html#the-models",
-    "title": "Figure 4c: WT NeRh50 maximum amplitudes and decay rate constants in response to changes in lipid-protein ratio (LPR)",
-    "section": "The Models",
-    "text": "The Models\nWe use linear models for amplitude and decay rate as dependent variables, with LPR as the independent factor, checking fit in Figure 1.\n\nShow the code\n# Fit the models\nmodel4c_amp_lm &lt;- lm(amplitude ~ LPR, data=dfms$dfm_4c)\nmodel4c_k_lm &lt;- lm(decayrate ~ LPR, data=dfms$dfm_4c)\n\n# Check model fit\nperformance::check_model(model4c_amp_lm)\nperformance::check_model(model4c_k_lm)\n\n\n\n\n\n\n\n\n\n\n\n\n(a) amplitude ~ LPR\n\n\n\n\n\n\n\n\n\n\n\n(b) decayrate ~ LPR\n\n\n\n\n\n\n\nFigure 1: Diagnostic plots for linear model fits of amplitude ~ LPR and decayrate ~ LPR. The splines for linearity/heteroscadicity are odd, but the datapoints are not concerning. There is some evidence of non-normality of residuals in the decay rate data, but nothing especially concerning.\n\n\n\nAs the model fit is acceptable, we estimate contrasts in Table 2.\n\n\nShow the code\nEMM &lt;- emmeans::emmeans(model4c_amp_lm, ~ LPR)\nconfint(emmeans::contrast(EMM, \"pairwise\", adjust=\"sidak\")) |&gt;\n  kableExtra::kbl(digits=3) |&gt;\n  kableExtra::kable_styling(\n    bootstrap_options = c(\"hover\", \"responsive\")\n  )\nEMM &lt;- emmeans::emmeans(model4c_k_lm, ~ LPR)\nconfint(emmeans::contrast(EMM, \"pairwise\", adjust=\"sidak\")) |&gt;\n  kableExtra::kbl(digits=3) |&gt;\n  kableExtra::kable_styling(\n    bootstrap_options = c(\"hover\", \"responsive\")\n  )\n\n\n\n\nTable 2: Contrasts for model fits, with Sidak adjustment. No contrast includes zero in the 95% confidence interval estimate.\n\n\n\n\n\n\n(a) Maximum amplitude\n\n\n\n\n\n\ncontrast\nestimate\nSE\ndf\nlower.CL\nupper.CL\n\n\n\n\nLPR5 - LPR10\n0.914\n0.075\n21\n0.720\n1.108\n\n\nLPR5 - LPR50\n1.467\n0.084\n21\n1.250\n1.684\n\n\nLPR10 - LPR50\n0.553\n0.084\n21\n0.336\n0.770\n\n\n\n\n\n\n\n\n\n\n\n\n(b) Decay rate\n\n\n\n\n\n\ncontrast\nestimate\nSE\ndf\nlower.CL\nupper.CL\n\n\n\n\nLPR5 - LPR10\n11.312\n1.314\n13\n7.716\n14.908\n\n\nLPR5 - LPR50\n20.582\n1.630\n13\n16.122\n25.042\n\n\nLPR10 - LPR50\n9.270\n1.670\n13\n4.700\n13.840\n\n\n\n\n\n\n\n\n\n\n\n\nAs no contrast includes zero in the 95% confidence interval, we conclude that there are differences in amplitude and decay rate constant for each pairwise comparison between LPR condition."
-  },
-  {
-    "objectID": "fig_4c.html#the-figures",
-    "href": "fig_4c.html#the-figures",
-    "title": "Figure 4c: WT NeRh50 maximum amplitudes and decay rate constants in response to changes in lipid-protein ratio (LPR)",
-    "section": "The Figures",
-    "text": "The Figures\nWe plot the differences, indicating P-values for the contrasts in Figure 2.\n\nShow the code\n# Get p-values, accounting for heteroscedasticity and multiple testing\n# Also generate group1 and group2 columns\nEMM_amp &lt;- as.data.frame(pairs(emmeans::emmeans(model4c_amp_lm, ~ LPR),\n                               adjust=\"sidak\")) |&gt;\n  tidyr::separate(contrast, into=c(\"group1\", \"group2\"), sep=\" - \") |&gt;\n  dplyr::mutate(y.position=2.5) |&gt;\n  rstatix::add_significance()\n\nEMM_k &lt;- as.data.frame(pairs(emmeans::emmeans(model4c_k_lm, ~ LPR),\n                               adjust=\"sidak\")) |&gt;\n  tidyr::separate(contrast, into=c(\"group1\", \"group2\"), sep=\" - \") |&gt;\n  dplyr::mutate(y.position=85) |&gt;\n  rstatix::add_significance()\n\np4c_amp &lt;- ggplot2::ggplot(dfms$dfm_4c, \n                           ggplot2::aes(x=LPR, y=amplitude, color=LPR)) +\n  ggplot2::geom_boxplot(outlier.shape = NA) +\n  ggplot2::geom_jitter() +\n  ggplot2::labs(y=\"Maximum amplitude (nA)\") +\n  ggplot2::ylim(0, 3.5) +\n  ggplot2::theme_minimal() +\n  ggpubr::stat_pvalue_manual(EMM_amp,\n                             label=\"p = {scales::pvalue(p.value)}\",\n                             size=3, step.increase=0.1)\n\np4c_k &lt;- ggplot2::ggplot(dfms$dfm_4c, \n                         ggplot2::aes(x=LPR, y=decayrate, color=LPR)) +\n  ggplot2::geom_boxplot(outlier.shape = NA) +\n  ggplot2::geom_jitter() +\n  ggplot2::labs(y=\"Decay rate constant k (/s)\") +\n  ggplot2::ylim(0, 105) +\n  ggplot2::theme_minimal() +\n  ggpubr::stat_pvalue_manual(EMM_k, \n                             label=\"p = {scales::pvalue(p.value)}\", \n                             size=3, step.increase=0.1)\n\np4c_amp\np4c_k\n\n# Write figures to file (commented out for webpage)\n#ggplot2::ggsave(\"assets/images/fig4c_WT_maximum_amplitude.pdf\", p4c_amp)\n#ggplot2::ggsave(\"assets/images/fig4c_WT_maximum_amplitude.png\", p4c_amp)\n#ggplot2::ggsave(\"assets/images/fig4c_WT_decay_rate_constant.pdf\", p4c_k)\n#ggplot2::ggsave(\"assets/images/fig4c_WT_decay_rate_constant.png\", p4c_k)\n\n\n\n\n\n\n\n\n\n\n\n\n(a) Figure 4c, maximum amplitude\n\n\n\n\n\n\n\n\n\n\n\n(b) Figure 4c, decay rate\n\n\n\n\n\n\n\nFigure 2: WT measurements across three LPRs, replicating figure 4c from the manuscript.\n\n\n\n\nDownloads\n\nDownload maximum amplitude figure as .pdf\nDownload maximum amplitude figure as .png\nDownload decay rate constant figure as .pdf\nDownload decay rate constant figure as .png"
+    "text": "The data in this manuscript were collected and analysed by the manuscript authors.\n\nBenjamin Cooper (Oxford)\nAdriana Bizior (Strathclyde) ORCID\nReza Talandashti (Oxford) ORCID\nAbraham O. Oluwole (Oxford) ORCID\nPeter Henderson (Strathclyde)\nThomas Harris (Strathclyde)\nCarol V. Robinson (Oxford) ORCID\nPaul A Hoskisson (Strathclyde) ORCID, Google Scholar\nSyma Khalid (Oxford) ORCID, Google Scholar\nLeighton Pritchard (Strathclyde) [ORCID]https://orcid.org/0000-0002-8392-2822), Google Scholar\nGeorgia Isom (Oxford) ORCID, Google Scholar\nArnaud Javelle (Strathclyde) ORCID, Google Scholar"
   },
   {
     "objectID": "index.html",
@@ -63,10 +42,31 @@
     "text": "Reporting Problems Or Making Suggestions\nPlease report any issues, problems, or suggested enhancements at the issues page"
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "figure_4c.html",
+    "href": "figure_4c.html",
+    "title": "Figure 4c: WT NeRh50 maximum amplitudes and decay rate constants in response to changes in lipid-protein ratio (LPR)",
     "section": "",
-    "text": "The data in this manuscript were collected and analysed by the manuscript authors.\n\nBenjamin Cooper (Oxford)\nAdriana Bizior (Strathclyde) ORCID\nReza Talandashti (Oxford) ORCID\nAbraham O. Oluwole (Oxford) ORCID\nPeter Henderson (Strathclyde)\nThomas Harris (Strathclyde)\nCarol V. Robinson (Oxford) ORCID\nPaul A Hoskisson (Strathclyde) ORCID, Google Scholar\nSyma Khalid (Oxford) ORCID, Google Scholar\nLeighton Pritchard (Strathclyde) [ORCID]https://orcid.org/0000-0002-8392-2822), Google Scholar\nGeorgia Isom (Oxford) ORCID, Google Scholar\nArnaud Javelle (Strathclyde) ORCID, Google Scholar"
+    "text": "Manuscript figure 4c uses shows WT maximum amplitude and decay rate constant variation over LPR5, LPR10, and LPR50 for the WT NeRh50 with NH4+ (figure 4c)."
+  },
+  {
+    "objectID": "figure_4c.html#the-dataset",
+    "href": "figure_4c.html#the-dataset",
+    "title": "Figure 4c: WT NeRh50 maximum amplitudes and decay rate constants in response to changes in lipid-protein ratio (LPR)",
+    "section": "The Dataset",
+    "text": "The Dataset\nThe data used for the figure are shown in Table 1\n\n\nShow the code\nDT::datatable(dfms$dfm_4c, options=list(pageLength=5))\n\n\n\n\nTable 1: Maximum amplitude and decay rate constant at three LPR values, for WT Rh50 (figure 4c).\n\n\n\n\n\n\n\n\n\n\n\nDownloads\n\ndownload data"
+  },
+  {
+    "objectID": "figure_4c.html#the-models",
+    "href": "figure_4c.html#the-models",
+    "title": "Figure 4c: WT NeRh50 maximum amplitudes and decay rate constants in response to changes in lipid-protein ratio (LPR)",
+    "section": "The Models",
+    "text": "The Models\nWe use linear models for amplitude and decay rate as dependent variables, with LPR as the independent factor, checking fit in Figure 1.\n\nShow the code\n# Fit the models\nmodel4c_amp_lm &lt;- lm(amplitude ~ LPR, data=dfms$dfm_4c)\nmodel4c_k_lm &lt;- lm(decayrate ~ LPR, data=dfms$dfm_4c)\n\n# Check model fit\nperformance::check_model(model4c_amp_lm)\nperformance::check_model(model4c_k_lm)\n\n\n\n\n\n\n\n\n\n\n\n\n(a) amplitude ~ LPR\n\n\n\n\n\n\n\n\n\n\n\n(b) decayrate ~ LPR\n\n\n\n\n\n\n\nFigure 1: Diagnostic plots for linear model fits of amplitude ~ LPR and decayrate ~ LPR. The splines for linearity/heteroscadicity are odd, but the datapoints are not concerning. There is some evidence of non-normality of residuals in the decay rate data, but nothing especially concerning.\n\n\n\nAs the model fit is acceptable, we estimate contrasts in Table 2.\n\n\nShow the code\nEMM &lt;- emmeans::emmeans(model4c_amp_lm, ~ LPR)\nconfint(emmeans::contrast(EMM, \"pairwise\", adjust=\"sidak\")) |&gt;\n  kableExtra::kbl(digits=3) |&gt;\n  kableExtra::kable_styling(\n    bootstrap_options = c(\"hover\", \"responsive\")\n  )\nEMM &lt;- emmeans::emmeans(model4c_k_lm, ~ LPR)\nconfint(emmeans::contrast(EMM, \"pairwise\", adjust=\"sidak\")) |&gt;\n  kableExtra::kbl(digits=3) |&gt;\n  kableExtra::kable_styling(\n    bootstrap_options = c(\"hover\", \"responsive\")\n  )\n\n\n\n\nTable 2: Contrasts for model fits, with Sidak adjustment. No contrast includes zero in the 95% confidence interval estimate.\n\n\n\n\n\n\n(a) Maximum amplitude\n\n\n\n\n\n\ncontrast\nestimate\nSE\ndf\nlower.CL\nupper.CL\n\n\n\n\nLPR5 - LPR10\n0.914\n0.075\n21\n0.720\n1.108\n\n\nLPR5 - LPR50\n1.467\n0.084\n21\n1.250\n1.684\n\n\nLPR10 - LPR50\n0.553\n0.084\n21\n0.336\n0.770\n\n\n\n\n\n\n\n\n\n\n\n\n(b) Decay rate\n\n\n\n\n\n\ncontrast\nestimate\nSE\ndf\nlower.CL\nupper.CL\n\n\n\n\nLPR5 - LPR10\n11.312\n1.314\n13\n7.716\n14.908\n\n\nLPR5 - LPR50\n20.582\n1.630\n13\n16.122\n25.042\n\n\nLPR10 - LPR50\n9.270\n1.670\n13\n4.700\n13.840\n\n\n\n\n\n\n\n\n\n\n\n\nAs no contrast includes zero in the 95% confidence interval, we conclude that there are differences in amplitude and decay rate constant for each pairwise comparison between LPR condition."
+  },
+  {
+    "objectID": "figure_4c.html#the-figures",
+    "href": "figure_4c.html#the-figures",
+    "title": "Figure 4c: WT NeRh50 maximum amplitudes and decay rate constants in response to changes in lipid-protein ratio (LPR)",
+    "section": "The Figures",
+    "text": "The Figures\nWe plot the differences, indicating P-values for the contrasts in Figure 2.\n\nShow the code\n# Get p-values, accounting for heteroscedasticity and multiple testing\n# Also generate group1 and group2 columns\nEMM_amp &lt;- as.data.frame(pairs(emmeans::emmeans(model4c_amp_lm, ~ LPR),\n                               adjust=\"sidak\")) |&gt;\n  tidyr::separate(contrast, into=c(\"group1\", \"group2\"), sep=\" - \") |&gt;\n  dplyr::mutate(y.position=2.5) |&gt;\n  rstatix::add_significance()\n\nEMM_k &lt;- as.data.frame(pairs(emmeans::emmeans(model4c_k_lm, ~ LPR),\n                               adjust=\"sidak\")) |&gt;\n  tidyr::separate(contrast, into=c(\"group1\", \"group2\"), sep=\" - \") |&gt;\n  dplyr::mutate(y.position=85) |&gt;\n  rstatix::add_significance()\n\np4c_amp &lt;- ggplot2::ggplot(dfms$dfm_4c, \n                           ggplot2::aes(x=LPR, y=amplitude, color=LPR)) +\n  ggplot2::geom_boxplot(outlier.shape = NA) +\n  ggplot2::geom_jitter() +\n  ggplot2::labs(y=\"Maximum amplitude (nA)\") +\n  ggplot2::ylim(0, 3.5) +\n  ggplot2::theme_minimal() +\n  ggpubr::stat_pvalue_manual(EMM_amp,\n                             label=\"p = {scales::pvalue(p.value)}\",\n                             size=3, step.increase=0.1)\n\np4c_k &lt;- ggplot2::ggplot(dfms$dfm_4c, \n                         ggplot2::aes(x=LPR, y=decayrate, color=LPR)) +\n  ggplot2::geom_boxplot(outlier.shape = NA) +\n  ggplot2::geom_jitter() +\n  ggplot2::labs(y=\"Decay rate constant k (/s)\") +\n  ggplot2::ylim(0, 105) +\n  ggplot2::theme_minimal() +\n  ggpubr::stat_pvalue_manual(EMM_k, \n                             label=\"p = {scales::pvalue(p.value)}\", \n                             size=3, step.increase=0.1)\n\np4c_amp\np4c_k\n\n# Write figures to file (commented out for webpage)\n#ggplot2::ggsave(\"assets/images/fig4c_WT_maximum_amplitude.pdf\", p4c_amp)\n#ggplot2::ggsave(\"assets/images/fig4c_WT_maximum_amplitude.png\", p4c_amp)\n#ggplot2::ggsave(\"assets/images/fig4c_WT_decay_rate_constant.pdf\", p4c_k)\n#ggplot2::ggsave(\"assets/images/fig4c_WT_decay_rate_constant.png\", p4c_k)\n\n\n\n\n\n\n\n\n\n\n\n\n(a) Figure 4c, maximum amplitude\n\n\n\n\n\n\n\n\n\n\n\n(b) Figure 4c, decay rate\n\n\n\n\n\n\n\nFigure 2: WT measurements across three LPRs, replicating figure 4c from the manuscript.\n\n\n\n\nDownloads\n\nDownload maximum amplitude figure as .pdf\nDownload maximum amplitude figure as .png\nDownload decay rate constant figure as .pdf\nDownload decay rate constant figure as .png"
   }
 ]
