@@ -133,10 +133,10 @@ p6b_amp
 p6b_k
 
 # Write figures to file (commented out for webpage)
-ggplot2::ggsave("assets/images/fig6b_WT_maximum_amplitude.pdf", p6b_amp)
-ggplot2::ggsave("assets/images/fig6b_WT_maximum_amplitude.png", p6b_amp)
-ggplot2::ggsave("assets/images/fig6b_WT_decay_rate_constant.png", p6b_k)
-ggplot2::ggsave("assets/images/fig6b_WT_decay_rate_constant.pdf", p6b_k)
+#ggplot2::ggsave("assets/images/fig6b_WT_maximum_amplitude.pdf", p6b_amp)
+#ggplot2::ggsave("assets/images/fig6b_WT_maximum_amplitude.png", p6b_amp)
+#ggplot2::ggsave("assets/images/fig6b_WT_decay_rate_constant.png", p6b_k)
+#ggplot2::ggsave("assets/images/fig6b_WT_decay_rate_constant.pdf", p6b_k)
 ```
 
 ### Downloads
